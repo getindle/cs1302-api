@@ -29,30 +29,24 @@ import javafx.geometry.Insets;
  * news data is powered by NewsAPI.
  */
 public class ApiApp extends Application {
+    // declare variables
     Stage stage;
     Scene scene;
     VBox root;
-
     HBox titleLayer;
     Label titleLabel;
-
     HBox topLayer;
     Label instructLabel;
-
     HBox svHolder;
+    // declare custom components
     StockViewer stockView1;
     StockViewer stockView2;
-    Separator separator;
-
+    Separator separator; // to separate the custom components
+    // declare buttons and hbox for buttons
     HBox bottomLayer;
     Button newsButton1;
     Button newsButton2;
     Button compareButton;
-
-//    HBox rightsBox = new HBox(8);
-//    Label rightsLabel = new Label("StockMatch is not intended to provide professional " +
-//        "financial advice. Seek professional advice before making financial decisions.");
-
 
     /**
      * Constructs an {@code ApiApp} object. This default (i.e., no argument)
@@ -60,20 +54,19 @@ public class ApiApp extends Application {
      */
     public ApiApp() {
         root = new VBox();
-
+        // construct app skeleton
         titleLayer = new HBox();
         titleLabel = new Label("StockMatch");
-
         topLayer = new HBox(10);
         topLayer.setPadding(new Insets(10, 0, 0, 0));
         instructLabel = new Label
         ("Directions: Enter 2 valid stock tickers, then compare them or see relevant news.");
-
+        // construct custom components
         svHolder = new HBox();
         stockView1 = new StockViewer();
         stockView2 = new StockViewer();
         separator = new Separator();
-
+        // construct buttons
         bottomLayer = new HBox();
         newsButton1 = new Button("Stock 1 News");
         newsButton2 = new Button("Stock 2 News");
@@ -85,39 +78,20 @@ public class ApiApp extends Application {
     public void start(Stage stage) {
 
         this.stage = stage;
-/*
-        // demonstrate how to load local asset using "file:resources/"
-        Image bannerImage = new Image("file:resources/readme-banner.png");
-        ImageView banner = new ImageView(bannerImage);
-        banner.setPreserveRatio(true);
-        banner.setFitWidth(640);
-
-        // some labels to display information
-        Label notice = new Label("Modify the starter code to suit your needs.");
-
-        // setup scene
-        root.getChildren().addAll(banner, notice, svHolder);
-*/
+        // make buttons look fancy
         beautifyApp();
-
         HBox.setHgrow(newsButton1, Priority.ALWAYS);
         HBox.setHgrow(compareButton, Priority.ALWAYS);
         HBox.setHgrow(newsButton2, Priority.ALWAYS);
-
         newsButton1.setMaxWidth(Double.MAX_VALUE);
         compareButton.setMaxWidth(Double.MAX_VALUE);
         newsButton2.setMaxWidth(Double.MAX_VALUE);
 
+        // add components to scene
         root.getChildren().addAll(titleLayer, topLayer, svHolder, bottomLayer);
-
         titleLayer.getChildren().add(titleLabel);
-
         topLayer.getChildren().add(instructLabel);
-
-//        rightsBox.getChildren().add(rightsLabel);
-
         svHolder.getChildren().addAll(stockView1, separator, stockView2);
-
         bottomLayer.getChildren().addAll(newsButton1, compareButton, newsButton2);
 
         scene = new Scene(root);
@@ -134,7 +108,7 @@ public class ApiApp extends Application {
     /** {@inheritDoc} */
     @Override
     public void init() {
-        System.out.println("init called...");
+        // call methods to setup app functionality
         sv2Changes();
         setUpButtons();
     }
@@ -151,30 +125,31 @@ public class ApiApp extends Application {
      * Private helper method to setup the EventHandler's for each button.
      */
     private void setUpButtons() {
+        // set up compare button
         EventHandler<ActionEvent> compareHandler = (ActionEvent e) -> {
             try {
                 stockView1.chartHttpConnect();
                 stockView2.chartHttpConnect();
             } catch (NullPointerException npe) {
-                alertError(npe);
+                alertError(npe); // alert error if not enough data found
             }
         };
         compareButton.setOnAction(compareHandler);
-
+        // set up news 1 button
         EventHandler<ActionEvent> news1Handler = (ActionEvent e) -> {
             try {
                 stockView1.newsHttpConnect();
             } catch (NullPointerException npe) {
-                alertError(npe);
+                alertError(npe); // alert error if not enough articles found
             }
         };
         newsButton1.setOnAction(news1Handler);
-
+        // set up news 2 button
         EventHandler<ActionEvent> news2Handler = (ActionEvent e) -> {
             try {
                 stockView2.newsHttpConnect();
             } catch (NullPointerException npe) {
-                alertError(npe);
+                alertError(npe); // alert error if not enough articles found
             }
         };
         newsButton2.setOnAction(news2Handler);
@@ -186,7 +161,8 @@ public class ApiApp extends Application {
      * @param cause the cause of the error.
      */
     private void alertError(Throwable cause) {
-        String errorMsg = cause.toString();
+        // create pop-up alert error for user
+        String errorMsg = cause.toString(); // message in the error
         TextArea text = new TextArea(errorMsg);
         text.setEditable(false);
         Alert alert = new Alert(AlertType.ERROR);
@@ -200,19 +176,19 @@ public class ApiApp extends Application {
      */
     private void beautifyApp() {
         titleLayer.setAlignment(Pos.CENTER);
-        titleLabel.setStyle(
+        titleLabel.setStyle( // style the "StockMatch" title
             "-fx-font-size: 30px;" +
             "-fx-font-family: Arial;" +
             "-fx-font-weight: bold;" +
             "-fx-font-style: italic;");
-
+        // make compare button a modern blue with 90 degree corners
         compareButton.setStyle("-fx-background-color: #3498db; " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;");
-
+        // if mouse is hovering on compare button, lighten button color & change mouse to hand
         compareButton.setOnMouseEntered(e -> compareButton.setStyle(
             "-fx-background-color: #4aa3df; " +
             "-fx-text-fill: white; " +
@@ -220,7 +196,7 @@ public class ApiApp extends Application {
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;"));
-
+        // if mouse leaves compare button, reset button style to before
         compareButton.setOnMouseExited(e -> compareButton.setStyle(
             "-fx-background-color: #3498db; " +
             "-fx-text-fill: white; " +
@@ -236,14 +212,14 @@ public class ApiApp extends Application {
      * Private helper method to beautify even more of the app.
      */
     private void beautifyApp2() {
-
+        // make both news button's style the exact same as the compare button
         newsButton1.setStyle("-fx-background-color: #3498db; " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;");
-
+        // when mouse is on stock news 1 button
         newsButton1.setOnMouseEntered(e -> newsButton1.setStyle(
             "-fx-background-color: #4aa3df; " +
             "-fx-text-fill: white; " +
@@ -251,7 +227,7 @@ public class ApiApp extends Application {
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;"));
-
+        // when mouse exits stock news 1 button
         newsButton1.setOnMouseExited(e -> newsButton1.setStyle(
             "-fx-background-color: #3498db; " +
             "-fx-text-fill: white; " +
@@ -259,13 +235,14 @@ public class ApiApp extends Application {
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;"));
+        // set up style for stock news 2 button
         newsButton2.setStyle("-fx-background-color: #3498db; " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;");
-
+        // when mouse hovers stock news 2 button
         newsButton2.setOnMouseEntered(e -> newsButton2.setStyle(
             "-fx-background-color: #4aa3df; " +
             "-fx-text-fill: white; " +
@@ -273,7 +250,7 @@ public class ApiApp extends Application {
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;"));
-
+        // when mouse exits stock news 2 button
         newsButton2.setOnMouseExited(e -> newsButton2.setStyle(
             "-fx-background-color: #3498db; " +
             "-fx-text-fill: white; " +
