@@ -38,6 +38,9 @@ public class ApiApp extends Application {
     HBox topLayer;
     Label instructLabel;
     HBox svHolder;
+    HBox rightsLayer;
+    Label rightsLabel1;
+    Label rightsLabel2;
     // declare custom components
     StockViewer stockView1;
     StockViewer stockView2;
@@ -57,10 +60,13 @@ public class ApiApp extends Application {
         // construct app skeleton
         titleLayer = new HBox();
         titleLabel = new Label("StockMatch");
-        topLayer = new HBox(10);
-        topLayer.setPadding(new Insets(10, 0, 0, 0));
+        topLayer = new HBox();
+        topLayer.setPadding(new Insets(3, 0, 5, 0));
         instructLabel = new Label
-        ("Directions: Enter 2 valid stock tickers, then compare them or see relevant news.");
+        ("Directions: Enter 2 valid stock tickers, then compare them or see relevant news. ");
+        rightsLabel1 = new Label("Only 5 API calls allowed per minute");
+        rightsLabel1.setStyle("-fx-underline: true;");
+        rightsLabel2 = new Label(" (two successful \"compare\" clicks).");
         // construct custom components
         svHolder = new HBox();
         stockView1 = new StockViewer();
@@ -90,7 +96,7 @@ public class ApiApp extends Application {
         // add components to scene
         root.getChildren().addAll(titleLayer, topLayer, svHolder, bottomLayer);
         titleLayer.getChildren().add(titleLabel);
-        topLayer.getChildren().add(instructLabel);
+        topLayer.getChildren().addAll(instructLabel, rightsLabel1, rightsLabel2);
         svHolder.getChildren().addAll(stockView1, separator, stockView2);
         bottomLayer.getChildren().addAll(newsButton1, compareButton, newsButton2);
 
@@ -204,8 +210,7 @@ public class ApiApp extends Application {
             "-fx-border-color: white; " +
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;"));
-
-        beautifyApp2();
+        beautifyApp2(); // call part 2 of beautify method
     }
 
     /**
@@ -259,5 +264,4 @@ public class ApiApp extends Application {
             "-fx-border-width: 1px; " +
             "-fx-cursor: hand;"));
     }
-
 } // ApiApp

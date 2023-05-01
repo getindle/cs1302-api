@@ -1,7 +1,5 @@
 package cs1302.api;
 
-import java.util.Map;
-import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
@@ -9,9 +7,6 @@ import java.util.List;
  * an object from the JSON response body.
  */
 public class AlphaResponse {
-/*    @SerializedName("Time Series (Daily)")
-    Map<String, AlphaResult> series;
-*/
     public String ticker;
     public int queryCount;
     public int resultsCount;
