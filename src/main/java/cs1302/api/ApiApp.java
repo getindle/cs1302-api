@@ -77,6 +77,8 @@ public class ApiApp extends Application {
         newsButton1 = new Button("Stock 1 News");
         newsButton2 = new Button("Stock 2 News");
         compareButton = new Button("Compare");
+        newsButton1.setDisable(true);
+        newsButton2.setDisable(true);
     } // ApiApp
 
     /** {@inheritDoc} */
@@ -135,8 +137,16 @@ public class ApiApp extends Application {
         EventHandler<ActionEvent> compareHandler = (ActionEvent e) -> {
             try {
                 stockView1.chartHttpConnect();
+                String button1Name = stockView1.buttonName + " News";
+                newsButton1.setText(button1Name);
                 stockView2.chartHttpConnect();
+                String button2Name = stockView2.buttonName + " News";
+                newsButton2.setText(button2Name);
+                newsButton1.setDisable(false);
+                newsButton2.setDisable(false);
             } catch (NullPointerException npe) {
+                newsButton1.setDisable(true);
+                newsButton2.setDisable(true);
                 alertError(npe); // alert error if not enough data found
             }
         };
@@ -145,7 +155,10 @@ public class ApiApp extends Application {
         EventHandler<ActionEvent> news1Handler = (ActionEvent e) -> {
             try {
                 stockView1.newsHttpConnect();
+                newsButton1.setDisable(true);
             } catch (NullPointerException npe) {
+                newsButton1.setDisable(true);
+                newsButton2.setDisable(true);
                 alertError(npe); // alert error if not enough articles found
             }
         };
@@ -154,7 +167,10 @@ public class ApiApp extends Application {
         EventHandler<ActionEvent> news2Handler = (ActionEvent e) -> {
             try {
                 stockView2.newsHttpConnect();
+                newsButton2.setDisable(true);
             } catch (NullPointerException npe) {
+                newsButton1.setDisable(true);
+                newsButton2.setDisable(true);
                 alertError(npe); // alert error if not enough articles found
             }
         };

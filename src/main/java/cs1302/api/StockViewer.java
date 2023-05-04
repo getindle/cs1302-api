@@ -74,6 +74,7 @@ public class StockViewer extends VBox {
     AlphaResponse alphaRespVar;
     NewsResponse newsRespVar;
     boolean compareClicked = false;
+    String buttonName = "";
 
     /**
      * Creates a {@code StockViewer} object containing a search box and empty
@@ -139,7 +140,8 @@ public class StockViewer extends VBox {
         String alphaUrl =
             "https://api.polygon.io/v2/aggs/ticker/";
         String searchVal = URLEncoder.encode(url.getText().toUpperCase(), StandardCharsets.UTF_8);
-        String alphaKey = "/range/1/day/2022-04-26/2023-04-26?adjusted=true" +
+        buttonName = url.getText().toUpperCase();
+        String alphaKey = "/range/1/day/2022-05-03/2023-05-03?adjusted=true" +
             "&sort=asc&apiKey=" + polygonApiKey;
         String encAlphaUrl = "";
         encAlphaUrl = alphaUrl + searchVal + alphaKey; // this is the full Url inlcuding API key
@@ -154,7 +156,9 @@ public class StockViewer extends VBox {
                 mainBox.getChildren().clear();
                 alphaRespVar = null;
                 throw new NullPointerException
-                ("One or more stock tickers are invalid.\nPlease try again.");
+                ("One or more stock tickers are invalid.\nPlease try again.\n\nNOTE: " +
+                "If both tickers are valid, you may be out of API calls.\nPlease wait one minute," +
+                " then try again.");
             }
             // build linechart
             LineChart<String, Number> lineChart = new LineChart<>(xAxis, yAxis);
@@ -198,10 +202,14 @@ public class StockViewer extends VBox {
      * Connects to the NewsAPI to retrieve and present 10 articles related to the desired
      * stock search by the user.
      */
-    public void newsHttpConnect() {
+    public void newsHttpConnect() throws NullPointerException {
+        if (alphaRespVar.ticker == null) {
+            throw new NullPointerException
+            ("No relevant articles found.\nPlease try a different ticker to see the news.");
+        }
         String newsUrl =
             "https://newsapi.org/v2/everything?q=";
-        String searchVal = URLEncoder.encode(url.getText(), StandardCharsets.UTF_8);
+        String searchVal = URLEncoder.encode(alphaRespVar.ticker, StandardCharsets.UTF_8);
         String newsKey = "&apikey=" + newsApiKey;
         String encNewsUrl = "";
         encNewsUrl = newsUrl + searchVal + newsKey; // this is the full Url including api key
