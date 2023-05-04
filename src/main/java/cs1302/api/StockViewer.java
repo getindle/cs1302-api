@@ -174,13 +174,11 @@ public class StockViewer extends VBox {
                 dates[i] = stockData.t;
                 closePrices[i] = stockData.c;
             }
-            // set chart labels
-            xAxis.setLabel("Year To Date (YTD)");
+            xAxis.setLabel("Year To Date (YTD)"); // set chart labels
             yAxis.setLabel("Prices");
             lineChart.setTitle(url.getText().toUpperCase());
-            // add data to chart
             XYChart.Series<String, Number> series = new XYChart.Series<>();
-            for (int i = 0; i < closePrices.length; i++) {
+            for (int i = 0; i < closePrices.length; i++) { // add data to the chart
                 String date = dates[i];
                 double cPrice = closePrices[i];
                 XYChart.Data<String, Number> newData = new XYChart.Data<>(date, cPrice);
